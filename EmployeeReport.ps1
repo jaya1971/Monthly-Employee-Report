@@ -31,11 +31,11 @@ process{
     foreach($OU in $OUArray){
         #Calculates Hires for last month from when report is triggered.
         [Array]$NewHires += Get-ADUser -Filter * -Properties DisplayName,mail,physicalDeliveryOfficeName,HireDate -SearchBase $OU | Where-Object { $_.HireDate.Month -eq $LastMonth -and $_.HireDate.Year -eq $ThisYear} `
-          | Select-Object DisplayName,mail,physicalDeliveryOfficeName,@{n="Hire Date";e={$_.HireDate.ToUniversalTime()}}
+          | Select-Object DisplayName,mail,physicalDeliveryOfficeName,@{n="HireDate";e={$_.HireDate.ToUniversalTime()}}
 
         #Calculates Birthdays for the current month.
         [Array]$Birthdays += Get-ADUser -Filter * -Properties DisplayName,mail,physicalDeliveryOfficeName,BirthDate -SearchBase $OU | Where-Object {$_.BirthDate.Month -eq $ThisMonth}`
-          | Select-Object DisplayName,mail,physicalDeliveryOfficeName,@{n="Birth_Date";e={$_.BirthDate.ToUniversalTime()}}
+          | Select-Object DisplayName,mail,physicalDeliveryOfficeName,@{n="BirthDate";e={$_.BirthDate.ToUniversalTime()}}
 
         #Calculates Anniversaries if employee has been with the company for at least one year
         [Array]$Anniversaries += Get-ADUser -Filter * -Properties DisplayName,mail,physicalDeliveryOfficeName,HireDate -SearchBase $OU | Where-Object ({ $_.HireDate.Month -eq $ThisMonth -and  $_.HireDate.Year -le $LastYear}) `
